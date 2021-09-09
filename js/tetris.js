@@ -8,7 +8,7 @@ const COLS = 10;
 let score = 0;
 let duration = 500;
 let downInterval;
-let tempMovingItem;
+let movingItemNext;
 
 // type -> direction -> position
 const BLOCKS = {
@@ -29,11 +29,12 @@ const movingItem = {
 
 // functions
 const init = () => {
-    tempMovingItem = { ...movingItem };
     for(let i = 0; i < ROWS; i++){
         appendRows();
     }
-    renderBlock();
+
+    movingItemNext = { ...movingItem };
+    renderBlocks();
 }
 
 const appendRows = () => {
@@ -47,8 +48,8 @@ const appendRows = () => {
     container.appendChild(row);
 }
 
-const renderBlock = () => {
-    const {type, direction, top, left} = tempMovingItem;
+const renderBlocks = () => {
+    let {type, direction, top, left} = movingItemNext;
 
     // remove current blocks before update
     const movingBlocks = document.querySelectorAll(".moving");
@@ -57,7 +58,7 @@ const renderBlock = () => {
     })
 
     // update next position
-    BLOCKS[type][direction].forEach(pos => {
+    for(let pos of BLOCKS[type][direction]){
         const x = pos[0] + top; // row
         const y = pos[1] + left; // col
 
@@ -66,18 +67,20 @@ const renderBlock = () => {
             
         if(!!target) target.classList.add(type, "moving");
         else{
-            tempMovingItem = { ...movingItem };
-            renderBlock();
+            // back to last state
+            movingItemNext = { ...movingItem };
+            renderBlocks();
+            break;
         }
-    });
-    movingItem.direction = direction;
-    movingItem.left = left;
-    movingItem.top = top;
+    }
+    movingItem.direction = movingItemNext.direction;
+    movingItem.left = movingItemNext.left;
+    movingItem.top = movingItemNext.top;
 }
 
-const moveBlock = (moveType, amount) => {
-    tempMovingItem[moveType] += amount;
-    renderBlock();
+const moveBlocks = (moveType, amount) => {
+    movingItemNext[moveType] += amount;
+    renderBlocks();
 }
 
 
@@ -87,10 +90,10 @@ init();
 // event
 document.addEventListener("keydown", e => {
     const keys = {
-        "ArrowUp"(){ moveBlock('top', -1); },
-        "ArrowDown"(){ moveBlock('top', 1); },
-        "ArrowRight"(){ moveBlock('left', 1); },
-        "ArrowLeft"(){ moveBlock('left', -1); },
+        "ArrowUp"(){ moveBlocks('top', -1); },
+        "ArrowDown"(){ moveBlocks('top', 1); },
+        "ArrowRight"(){ moveBlocks('left', 1); },
+        "ArrowLeft"(){ moveBlocks('left', -1); },
     }
 
     if(Object.keys(keys).includes(e.key)) keys[e.key]();
