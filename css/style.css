@@ -46,5 +46,59 @@ ul{
 }
 
 .tree{
+    background-color: #9c27b0;
+}
+
+.bar{
+    background-color: #00bcd4;
+}
+
+.square{
+    background-color: #fdd835;
+}
+
+.leftL{
+    background-color: #fb8c00;
+}
+
+.rightL{
+    background-color: #3949ab;
+}
+
+.leftZ{
     background-color: #d81b60;
+}
+
+.rightZ{
+    background-color: #7cb342;
+}
+
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, .5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-text{
+    color: white;
+    margin: 5px;
+}
+
+.modal-button{
+    margin: 5px;
+    padding: 5px;
+    font-size: larger;
+}
+
+.modal > p {
+    margin: 5px;
+    font-size: smaller;
+    color: white;
 }
