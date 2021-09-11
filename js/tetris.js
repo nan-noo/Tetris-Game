@@ -11,7 +11,7 @@ const modalBtn = document.querySelector(".modal-button");
 const ROWS = 20;
 const COLS = 10;
 
-let score = 0;
+let score;
 let duration = 500;
 let downInterval;
 let movingItemNext;
@@ -24,16 +24,19 @@ const movingItem = {
     left: 3,
 };
 
-// functions
+// initialize functions
 const init = () => {
     container.innerHTML = '';
     for(let i = 0; i < ROWS; i++){
         prependRows();
     }
     isPause = false;
+    score = 0;
+    gameScore.innerHTML = score;
     generateNewBlocks();
 };
 
+// block rendering functions
 const prependRows = () => {
     const row = document.createElement("li");
     const rowContent = document.createElement("ul");
@@ -91,11 +94,9 @@ const checkLine = () => {
         }
     });
     gameScore.innerHTML = score;
-    if(score > 0){
+    if(score > 1000 && isStart){
         clearInterval(downInterval);
-        modalText.innerHTML = "Congratulations!!"
-        modalBtn.innerHTML = "RESTART"
-        modal.style.display = "flex";
+        showModal("Congratulations!!", "RESTART");
         modalBtn.onclick = () => {
             modal.style.display = "none";
             init();
@@ -108,7 +109,7 @@ const checkLine = () => {
 const renderBlocks = (moveType = '') => {
     const {type, direction, top, left} = movingItemNext;
 
-    // remove current blocks before update
+    // remove current moving blocks before update
     const movingBlocks = document.querySelectorAll(".moving");
     movingBlocks.forEach(block => {
         block.classList.remove(type, "moving");
@@ -125,7 +126,7 @@ const renderBlocks = (moveType = '') => {
         if(!!target && !target.classList.contains("stop")) {
             target.classList.add(type, "moving");
         }
-        else{ // no target or stop block
+        else{
             if(moveType === 're-rendering'){
                 gameOver();
                 return true;
@@ -133,7 +134,7 @@ const renderBlocks = (moveType = '') => {
 
             // back to previous state
             movingItemNext = { ...movingItem };
-            setTimeout(() => {
+            setTimeout(() => { // to avoid 'exceeded maximum stack error'
                 renderBlocks('re-rendering');
                 if(moveType === 'top') stopBlocks();
             }, 0);
@@ -145,6 +146,7 @@ const renderBlocks = (moveType = '') => {
     movingItem.top = top;
 };
 
+// block control functions
 const moveBlocks = (moveType, amount) => {
     movingItemNext[moveType] += amount;
     renderBlocks(moveType);
@@ -159,44 +161,55 @@ const dropBlocks = () => {
 };
 
 const pauseBlocks = () => {
+    if(!isStart) return;
     isPause = !isPause;
     if(isPause){
         clearInterval(downInterval);
-        modalText.innerHTML = "Pause"
-        modalBtn.innerHTML = "CONTINUE"
-        modal.style.display = "flex";
+        showModal("Pause", "CONTINUE");
         modalBtn.onclick = () => {
-            isPause = !isPause;
-            modal.style.display = "none";
-
-            clearInterval(downInterval);
-            downInterval = setInterval(() => {
-                moveBlocks('top', 1);
-            }, duration);
+            pauseBlocks();     
         };
+    }
+    else{
+        modal.style.display = "none";
+
+        clearInterval(downInterval);
+        downInterval = setInterval(() => {
+            moveBlocks('top', 1);
+        }, duration);
     } 
 };
 
-const changeDirection = () => {
+const rotateBlocks = () => {
     if(isPause) return;
     movingItemNext.direction = (movingItemNext.direction + 1) % 4;
     renderBlocks();
 };
 
+// game view control functions
 const gameOver = () => {
+    if(!isStart) return;
+
     clearInterval(downInterval);
-    modalText.innerHTML = "Game Over"
-    modalBtn.innerHTML = "RESTART"
-    modal.style.display = "flex";
+
+    showModal("Game Over", "RESTART");
     modalBtn.onclick = () => {
         modal.style.display = "none";
         init();
     }
 };
 
+const showModal = (title, btnTxt) => {
+    modalText.innerHTML = title;
+    modalBtn.innerHTML = btnTxt;
+    modal.style.display = "flex";
+};
+
 // start
+let isStart = false;
 init();
 modalBtn.onclick = () => {
+    isStart = true;
     modal.style.display = "none";
     init();
 };
@@ -204,7 +217,7 @@ modalBtn.onclick = () => {
 // event handling
 document.addEventListener("keydown", e => {
     const codes = {
-        "ArrowUp"(){ changeDirection(); },
+        "ArrowUp"(){ rotateBlocks(); },
         "ArrowDown"(){ moveBlocks('top', 1); },
         "ArrowRight"(){ moveBlocks('left', 1); },
         "ArrowLeft"(){ moveBlocks('left', -1); },
