@@ -71,14 +71,16 @@ function generateNewBlock() {
     downInterval = changeInterval(downInterval, duration);
 
     // new block
-    const boxArray = Object.keys(BLOCKS);
-    const type = boxArray[Math.floor(Math.random() * boxArray.length)];
+    const blockTypes = Object.keys(BLOCKS);
+    const type = blockTypes[Math.floor(Math.random() * blockTypes.length)];
     movingItem.type = type;
     movingItem.direction = 0;
     movingItem.top = 0;
     movingItem.left = 3;
+
     movingItemNext = { ...movingItem };
-    renderBlocks();
+    console.log(movingItemNext);
+    renderBlock();
 }
 
 const stopBlocks = () => {
@@ -121,7 +123,7 @@ const checkLine = () => {
     generateNewBlock();
 };
 
-const renderBlocks = (moveType = '') => {
+const renderBlock = (moveType = '') => {
     const {type, direction, top, left} = movingItemNext;
 
     // remove current moving blocks before update
@@ -191,7 +193,7 @@ const pauseBlocks = () => {
 const rotateBlocks = () => {
     if(isPause) return;
     movingItemNext.direction = (movingItemNext.direction + 1) % 4;
-    renderBlocks();
+    renderBlock();
 };
 
 // game view control functions
