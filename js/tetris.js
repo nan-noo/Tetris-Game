@@ -38,7 +38,7 @@ function init() {
     gameScore.innerHTML = score;
 
     initializeBlockContainer(ROWS, COLS);
-    generateNewBlocks();
+    generateNewBlock();
 }
 
 function createElement(element) {
@@ -58,12 +58,17 @@ function prependRow (numOfColumns) {
 }
 
 // block rendering functions
-const generateNewBlocks = () => {
-    // basic block down
-    clearInterval(downInterval);
-    downInterval = setInterval(() => {
+function changeInterval(interval, duration) {
+    clearInterval(interval);
+    interval = setInterval(() => {
         moveBlocks('top', 1);
     }, duration);
+    return interval;
+}
+
+function generateNewBlock() {
+    // basic block down
+    downInterval = changeInterval(downInterval, duration);
 
     // new block
     const boxArray = Object.keys(BLOCKS);
@@ -74,7 +79,7 @@ const generateNewBlocks = () => {
     movingItem.left = 3;
     movingItemNext = { ...movingItem };
     renderBlocks();
-};
+}
 
 const stopBlocks = () => {
     // make moving blocks to stop
@@ -113,7 +118,7 @@ const checkLine = () => {
         };
         return;
     }
-    generateNewBlocks();
+    generateNewBlock();
 };
 
 const renderBlocks = (moveType = '') => {
@@ -164,10 +169,7 @@ const moveBlocks = (moveType, amount) => {
 
 const dropBlocks = () => {
     if(isPause) return;
-    clearInterval(downInterval);
-    downInterval = setInterval(() => {
-        moveBlocks('top', 1); 
-    }, 10);
+    downInterval = changeInterval(downInterval, 10);
 };
 
 const pauseBlocks = () => {
@@ -182,11 +184,7 @@ const pauseBlocks = () => {
     }
     else{
         modal.style.display = "none";
-
-        clearInterval(downInterval);
-        downInterval = setInterval(() => {
-            moveBlocks('top', 1);
-        }, duration);
+        downInterval = changeInterval(downInterval, duration);
     } 
 };
 
