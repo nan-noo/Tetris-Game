@@ -89,38 +89,47 @@ function stopBlock() {
         block.classList.remove("moving");
         block.classList.add("stop");
     });
-    checkLine();
+    checkLines();
 }
 
-const checkLine = () => {
-    // check if some lines are completed
-    const childNodes = container.childNodes; // rows(li)
-    childNodes.forEach(child => {
-        let lineCompleted = true;
-        for(let li of child.childNodes[0].childNodes){
-            if(!li.classList.contains("stop")){
-                lineCompleted = false;
-                break;
-            }
-        }
-        if(lineCompleted){
-            child.remove();
-            prependRow(COLS);
-            score += 10;
-        }
-    });
+function isLineCompleted(row) {
+    const cols = row.childNodes[0].childNodes; // cols(li)
+    for(let cell of cols){
+        if(!cell.classList.contains("stop")) return false;
+    }
+    return true;
+}
+
+function updateScore(score) {
     gameScore.innerHTML = score;
+    if(!isEndingScore(score, isStart)) generateNewBlock();
+}
+
+function isEndingScore(score, isStart) {
     if(score > 1000 && isStart){
         clearInterval(downInterval);
+
         showModal("Congratulations!!", "RESTART");
         modalBtn.onclick = () => {
             modal.style.display = "none";
             init();
         };
-        return;
+        return true;
     }
-    generateNewBlock();
-};
+    return false;
+}
+
+function checkLines() {
+    const rows = container.childNodes;
+    rows.forEach(row => {
+        if(isLineCompleted(row)) {
+            row.remove();
+            prependRow(COLS);
+            score += 10;
+        }
+    });
+    updateScore(score);
+}
 
 const renderBlock = (moveType = '') => {
     const {type, direction, top, left} = movingItemNext;
