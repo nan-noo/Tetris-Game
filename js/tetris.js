@@ -79,19 +79,18 @@ function generateNewBlock() {
     movingItem.left = 3;
 
     movingItemNext = { ...movingItem };
-    console.log(movingItemNext);
     renderBlock();
 }
 
-const stopBlocks = () => {
+function stopBlock() {
     // make moving blocks to stop
     const movingBlocks = document.querySelectorAll(".moving");
     movingBlocks.forEach(block => {
         block.classList.remove("moving");
         block.classList.add("stop");
-    })
+    });
     checkLine();
-};
+}
 
 const checkLine = () => {
     // check if some lines are completed
@@ -152,8 +151,8 @@ const renderBlock = (moveType = '') => {
             // back to previous state
             movingItemNext = { ...movingItem };
             setTimeout(() => { // to avoid 'exceeded maximum stack error'
-                renderBlocks('re-rendering');
-                if(moveType === 'top') stopBlocks();
+                renderBlock('re-rendering');
+                if(moveType === 'top') stopBlock();
             }, 0);
             return true;
         }
@@ -166,7 +165,7 @@ const renderBlock = (moveType = '') => {
 // block control functions
 const moveBlocks = (moveType, amount) => {
     movingItemNext[moveType] += amount;
-    renderBlocks(moveType);
+    renderBlock(moveType);
 };
 
 const dropBlocks = () => {
