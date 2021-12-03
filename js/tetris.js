@@ -25,9 +25,9 @@ const movingItem = {
 };
 
 // initialize functions
-function initializeBlockContainer(numOfRows) {
+function initializeBlockContainer(numOfRows, numOfColumns) {
     for(let i = 0; i < numOfRows; i++){
-        prependRows();
+        prependRow(numOfColumns);
     }
 }
 
@@ -37,20 +37,19 @@ function init() {
     score = 0;
     gameScore.innerHTML = score;
 
-    initializeBlockContainer(ROWS);
+    initializeBlockContainer(ROWS, COLS);
     generateNewBlocks();
 }
 
-// block rendering functions
 function createElement(element) {
     return document.createElement(element);
 }
 
-function prependRows () {
+function prependRow (numOfColumns) {
     const row = createElement("li");
     const rowContent = createElement("ul");
 
-    for(let j = 0; j < COLS; j++){
+    for(let j = 0; j < numOfColumns; j++){
         const cell = createElement("li");
         rowContent.append(cell);
     }
@@ -58,6 +57,7 @@ function prependRows () {
     container.prepend(row);
 }
 
+// block rendering functions
 const generateNewBlocks = () => {
     // basic block down
     clearInterval(downInterval);
@@ -99,7 +99,7 @@ const checkLine = () => {
         }
         if(lineCompleted){
             child.remove();
-            prependRows();
+            prependRow(COLS);
             score += 10;
         }
     });
