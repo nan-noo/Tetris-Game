@@ -25,19 +25,25 @@ const movingItem = {
 };
 
 // initialize functions
-const init = () => {
-    container.innerHTML = '';
-    for(let i = 0; i < ROWS; i++){
+function initializeBlockContainer(numOfRows) {
+    for(let i = 0; i < numOfRows; i++){
         prependRows();
     }
+}
+
+function init() {
+    container.innerHTML = '';
     isPause = false;
     score = 0;
     gameScore.innerHTML = score;
+
+    initializeBlockContainer(ROWS);
     generateNewBlocks();
-};
+}
+
 
 // block rendering functions
-const prependRows = () => {
+function prependRows () {
     const row = document.createElement("li");
     const rowContent = document.createElement("ul");
     for(let j = 0; j < COLS; j++){
@@ -46,7 +52,7 @@ const prependRows = () => {
     }
     row.append(rowContent);
     container.prepend(row);
-};
+}
 
 const generateNewBlocks = () => {
     // basic block down
