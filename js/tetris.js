@@ -41,13 +41,17 @@ function init() {
     generateNewBlocks();
 }
 
-
 // block rendering functions
+function createElement(element) {
+    return document.createElement(element);
+}
+
 function prependRows () {
-    const row = document.createElement("li");
-    const rowContent = document.createElement("ul");
+    const row = createElement("li");
+    const rowContent = createElement("ul");
+
     for(let j = 0; j < COLS; j++){
-        const cell = document.createElement("li");
+        const cell = createElement("li");
         rowContent.append(cell);
     }
     row.append(rowContent);
