@@ -52,7 +52,7 @@ function createElement(element) {
     return document.createElement(element);
 }
 
-function prependRow (numOfColumns) {
+function prependRow(numOfColumns) {
     const row = createElement("li");
     const rowContent = createElement("ul");
 
@@ -68,7 +68,7 @@ function prependRow (numOfColumns) {
 function changeInterval(interval, duration) {
     clearInterval(interval);
     interval = setInterval(() => {
-        moveBlocks('top', 1);
+        moveBlock('top', 1);
     }, duration);
     return interval;
 }
@@ -90,7 +90,6 @@ function generateNewBlock() {
 }
 
 function stopBlock() {
-    // make moving blocks to stop
     const movingBlocks = document.querySelectorAll(".moving");
     movingBlocks.forEach(block => {
         block.classList.remove("moving");
@@ -177,25 +176,25 @@ function renderBlock(moveType, reRendering = false) {
 };
 
 // block control functions
-function moveBlocks(moveType, amount) {
+function moveBlock(moveType, amount) {
     if(isPause) return;
     movingItemNext[moveType] += amount;
     renderBlock(moveType);
 }
 
-function dropBlocks() {
+function dropBlock() {
     if(isPause) return;
     downInterval = changeInterval(downInterval, 10);
 }
 
-function pauseBlocks() {
+function pauseBlock() {
     if(!isStart) return;
     isPause = !isPause;
     if(isPause){
         clearInterval(downInterval);
         showModal("Pause", "CONTINUE");
         modalBtn.onclick = () => {
-            pauseBlocks();     
+            pauseBlock();     
         };
     }
     else{
@@ -204,7 +203,7 @@ function pauseBlocks() {
     } 
 }
 
-function rotateBlocks() {
+function rotateBlock() {
     if(isPause) return;
     movingItemNext.direction = (movingItemNext.direction + 1) % 4;
     renderBlock('rotate');
@@ -253,12 +252,12 @@ modalBtn.onclick = () => {
 // event handling
 document.addEventListener("keydown", e => {
     const codes = {
-        "ArrowUp"(){ rotateBlocks(); },
-        "ArrowDown"(){ moveBlocks('top', 1); },
-        "ArrowRight"(){ moveBlocks('left', 1); },
-        "ArrowLeft"(){ moveBlocks('left', -1); },
-        "Space"(){ dropBlocks(); },
-        "KeyP"(){ pauseBlocks(); },
+        "ArrowUp"(){ rotateBlock(); },
+        "ArrowDown"(){ moveBlock('top', 1); },
+        "ArrowRight"(){ moveBlock('left', 1); },
+        "ArrowLeft"(){ moveBlock('left', -1); },
+        "Space"(){ dropBlock(); },
+        "KeyP"(){ pauseBlock(); },
         "KeyR"(){ resetGame(); },
     }
     if(Object.keys(codes).includes(e.code)) codes[e.code]();
