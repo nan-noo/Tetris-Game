@@ -104,20 +104,12 @@ function isLineCompleted(row) {
 
 function updateScore(score) {
     gameScore.innerHTML = score;
-    if(!isEndingScore(score, isStart)) generateNewBlock();
+    if(isEndingScore(score, isStart)) gameEnd();
+    else generateNewBlock();
 }
 
 function isEndingScore(score, isStart) {
-    if(score > 1000 && isStart){
-        clearInterval(downInterval);
-
-        showModal("Congratulations!!", "RESTART");
-        modalBtn.onclick = () => {
-            modal.style.display = "none";
-            init();
-        };
-        return true;
-    }
+    if(score >= 1000 && isStart) return true;
     return false;
 }
 
@@ -224,6 +216,15 @@ function gameOver() {
         init();
     }
 };
+
+function gameEnd() {
+    clearInterval(downInterval);
+    showModal("Congratulations!!", "RESTART");
+    modalBtn.onclick = () => {
+        modal.style.display = "none";
+        init();
+    };
+}
 
 function showModal(title, btnTxt) {
     modalText.innerHTML = title;
