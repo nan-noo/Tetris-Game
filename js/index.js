@@ -39,7 +39,7 @@ function initHtml() {
     gameScore.innerHTML = 0;
 }
 
-function init() {
+function initGameSetting() {
     isPause = false;
     score = 0;
     initializeBlockContainer(ROWS, COLS);
@@ -218,7 +218,7 @@ function gameOver() {
         isStart = true;
         modal.style.display = "none";
         initHtml();
-        init();
+        initGameSetting();
     }
 };
 
@@ -228,7 +228,7 @@ function gameEnd() {
     modalBtn.onclick = () => {
         modal.style.display = "none";
         initHtml();
-        init();
+        initGameSetting();
     };
 }
 
@@ -241,17 +241,17 @@ function showModal(title, btnTxt) {
 function resetGame() {
     if(!isStart || isPause) return;
     initHtml();
-    init();
+    initGameSetting();
 }
 
 // start
 initHtml();
-init();
+initGameSetting();
 modalBtn.onclick = () => {
     isStart = true;
     modal.style.display = "none";
     initHtml();
-    init();
+    initGameSetting();
 };
 
 // event handling
