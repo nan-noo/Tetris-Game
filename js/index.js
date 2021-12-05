@@ -40,8 +40,6 @@ function initHtml() {
 }
 
 function init() {
-    initHtml();
-
     isPause = false;
     score = 0;
     initializeBlockContainer(ROWS, COLS);
@@ -89,15 +87,6 @@ function generateNewBlock() {
     renderBlock('');
 }
 
-function stopBlock() {
-    const movingBlocks = document.querySelectorAll(".moving");
-    movingBlocks.forEach(block => {
-        block.classList.remove("moving");
-        block.classList.add("stop");
-    });
-    checkLines();
-}
-
 function isLineCompleted(row) {
     const cols = row.childNodes[0].childNodes; // cols(li)
     for(let cell of cols){
@@ -106,7 +95,7 @@ function isLineCompleted(row) {
     return true;
 }
 
-function updateScore(score) {
+function updateScore() {
     gameScore.innerHTML = score;
     if(isEndingScore(score, isStart)) gameEnd();
     else generateNewBlock();
@@ -126,7 +115,15 @@ function checkLines() {
             score += 10;
         }
     });
-    updateScore(score);
+    updateScore();
+}
+
+function stopBlock() {
+    const movingBlocks = document.querySelectorAll(".moving");
+    movingBlocks.forEach(block => {
+        block.classList.remove("moving");
+        block.classList.add("stop");
+    });
 }
 
 function removePreviousMovingBlock(type) {
@@ -158,7 +155,10 @@ function updateBlockPosition(moveType, reRendering) {
             movingItemNext = { ...movingItem };
             setTimeout(() => { // to avoid 'exceeded maximum stack error
                 renderBlock(moveType, true);
-                if(moveType === 'top') stopBlock();
+                if(moveType === 'top') {
+                    stopBlock();
+                    checkLines();
+                }
             }, 0);
             return true;
         }
@@ -217,6 +217,7 @@ function gameOver() {
     modalBtn.onclick = () => {
         isStart = true;
         modal.style.display = "none";
+        initHtml();
         init();
     }
 };
@@ -226,6 +227,7 @@ function gameEnd() {
     showModal("Congratulations!!", "RESTART");
     modalBtn.onclick = () => {
         modal.style.display = "none";
+        initHtml();
         init();
     };
 }
@@ -238,14 +240,17 @@ function showModal(title, btnTxt) {
 
 function resetGame() {
     if(!isStart || isPause) return;
+    initHtml();
     init();
 }
 
 // start
+initHtml();
 init();
 modalBtn.onclick = () => {
     isStart = true;
     modal.style.display = "none";
+    initHtml();
     init();
 };
 
