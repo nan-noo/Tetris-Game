@@ -34,11 +34,6 @@ function initializeBlockContainer(numOfRows, numOfColumns) {
     }
 }
 
-function initHtml() {
-    container.innerHTML = '';
-    gameScore.innerHTML = 0;
-}
-
 function initGameSetting() {
     isPause = false;
     score = 0;
@@ -175,6 +170,16 @@ function renderBlock(moveType, reRendering = false) {
     movingItem.top = top;
 };
 
+function init() {
+    initHtml();
+    initGameSetting();
+}
+
+function initHtml() {
+    container.innerHTML = '';
+    gameScore.innerHTML = 0;
+}
+
 // block control functions
 function moveBlock(moveType, amount) {
     if(isPause) return;
@@ -217,8 +222,7 @@ function gameOver() {
     modalBtn.onclick = () => {
         isStart = true;
         modal.style.display = "none";
-        initHtml();
-        initGameSetting();
+        init();
     }
 };
 
@@ -227,8 +231,7 @@ function gameEnd() {
     showModal("Congratulations!!", "RESTART");
     modalBtn.onclick = () => {
         modal.style.display = "none";
-        initHtml();
-        initGameSetting();
+        init();
     };
 }
 
@@ -240,18 +243,15 @@ function showModal(title, btnTxt) {
 
 function resetGame() {
     if(!isStart || isPause) return;
-    initHtml();
-    initGameSetting();
+    init();
 }
 
 // start
-initHtml();
-initGameSetting();
+init();
 modalBtn.onclick = () => {
     isStart = true;
     modal.style.display = "none";
-    initHtml();
-    initGameSetting();
+    init();
 };
 
 // event handling
