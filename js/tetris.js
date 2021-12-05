@@ -131,14 +131,17 @@ function checkLines() {
     updateScore(score);
 }
 
-const renderBlock = (moveType = '') => {
-    const {type, direction, top, left} = movingItemNext;
-
-    // remove current moving blocks before update
+function removePreviousMovingBlock(type) {
     const movingBlocks = document.querySelectorAll(".moving");
     movingBlocks.forEach(block => {
         block.classList.remove(type, "moving");
-    })
+    });
+}
+
+function renderBlock(moveType = '') {
+    const {type, direction, top, left} = movingItemNext;
+
+    removePreviousMovingBlock(movingItemNext.type);
 
     // update block position
     BLOCKS[type][direction].some(pos => {
