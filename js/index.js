@@ -3,46 +3,10 @@
 import BLOCKS from './blocks.js';
 import { ROWS, COLS, endingScore, duration, movingItem } from './settings.js';
 import TetrisGame from './tetris-game.js';
+import TetrisGameController from './game-controller.js';
 
-// block control functions
-function moveBlock(moveType, amount) {
-    if(newGame.isPause) return;
-    newGame.movingItemNext[moveType] += amount;
-    newGame.renderBlock(moveType);
-}
-
-function dropBlock() {
-    if(newGame.isPause) return;
-    newGame.changeInterval(10);
-}
-
-function pauseBlock() {
-    if(!newGame.isStart) return;
-    newGame.isPause = !newGame.isPause;
-    if(newGame.isPause){
-        clearInterval(newGame.downInterval);
-        newGame.showModal("Pause", "CONTINUE");
-        newGame.modalBtn.onclick = () => pauseBlock();
-    }
-    else{
-        newGame.modal.style.display = "none";
-        newGame.changeInterval();
-    } 
-}
-
-function rotateBlock() {
-    if(newGame.isPause) return;
-    newGame.movingItemNext.direction = (newGame.movingItemNext.direction + 1) % 4;
-    newGame.renderBlock('rotate');
-}
-
-function resetGame() {
-    if(!newGame.isStart || newGame.isPause) return;
-    newGame.init();
-}
-
-// main
 const newGame = new TetrisGame(BLOCKS, ROWS, COLS, endingScore, duration, movingItem);
+const gameCtrl = new TetrisGameController(newGame);
 newGame.init();
 newGame.modalBtn.onclick = () => {
     newGame.isStart = true;
@@ -50,16 +14,15 @@ newGame.modalBtn.onclick = () => {
     newGame.init();
 };
 
-// event handler
 document.addEventListener("keydown", e => {
     const codes = {
-        "ArrowUp"(){ rotateBlock(); },
-        "ArrowDown"(){ moveBlock('top', 1); },
-        "ArrowRight"(){ moveBlock('left', 1); },
-        "ArrowLeft"(){ moveBlock('left', -1); },
-        "Space"(){ dropBlock(); },
-        "KeyP"(){ pauseBlock(); },
-        "KeyR"(){ resetGame(); },
+        "ArrowUp"(){ gameCtrl.rotateBlock(); },
+        "ArrowDown"(){ gameCtrl.moveBlock('top', 1); },
+        "ArrowRight"(){ gameCtrl.moveBlock('left', 1); },
+        "ArrowLeft"(){ gameCtrl.moveBlock('left', -1); },
+        "Space"(){ gameCtrl.dropBlock(); },
+        "KeyP"(){ gameCtrl.pauseBlock(); },
+        "KeyR"(){ gameCtrl.resetGame(); },
     }
     if(Object.keys(codes).includes(e.code)) codes[e.code]();
 });
