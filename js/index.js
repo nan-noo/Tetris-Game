@@ -1,19 +1,8 @@
 'use-strict';
 
 import BLOCKS from './blocks.js';
+import { ROWS, COLS, endingScore, duration, movingItem } from './settings.js';
 import TetrisGame from './tetris-game.js';
-
-// settings
-const ROWS = 20;
-const COLS = 10;
-const endingScore = 1000;
-const duration = 500;
-const movingItem = {
-    type: "",
-    direction: 0,
-    top: 0,
-    left: 3,
-};
 
 // block control functions
 function moveBlock(moveType, amount) {
