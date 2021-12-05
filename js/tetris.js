@@ -138,6 +138,11 @@ function removePreviousMovingBlock(type) {
     });
 }
 
+function isAvailablePosition(pos) {
+    if(!pos || pos.classList.contains("stop")) return false;
+    else return true;
+}
+
 function updateBlockPosition(moveType) {
     const {type, direction, top, left} = movingItemNext;
 
@@ -146,7 +151,7 @@ function updateBlockPosition(moveType) {
         const nextCol = pos[1] + left;
         const nextPos = container.childNodes[nextRow]?.childNodes[0].childNodes[nextCol];
             
-        if(!!nextPos && !nextPos.classList.contains("stop")) {
+        if(isAvailablePosition(nextPos)) {
             nextPos.classList.add(type, "moving");
         }
         else{
