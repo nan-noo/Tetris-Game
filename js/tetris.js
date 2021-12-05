@@ -79,7 +79,7 @@ function generateNewBlock() {
     movingItem.left = 3;
 
     movingItemNext = { ...movingItem };
-    renderBlock();
+    renderBlock('');
 }
 
 function stopBlock() {
@@ -143,7 +143,7 @@ function isAvailablePosition(pos) {
     else return true;
 }
 
-function updateBlockPosition(moveType) {
+function updateBlockPosition(moveType, reRendering) {
     const {type, direction, top, left} = movingItemNext;
 
     BLOCKS[type][direction].some(pos => {
@@ -151,18 +151,16 @@ function updateBlockPosition(moveType) {
         const nextCol = pos[1] + left;
         const nextPos = container.childNodes[nextRow]?.childNodes[0].childNodes[nextCol];
             
-        if(isAvailablePosition(nextPos)) {
-            nextPos.classList.add(type, "moving");
-        }
+        if(isAvailablePosition(nextPos)) nextPos.classList.add(type, "moving");
         else{
-            if(moveType === 're-rendering'){
+            if(reRendering){
                 gameOver();
                 return true;
             }
             // back to previous state
             movingItemNext = { ...movingItem };
             setTimeout(() => { // to avoid 'exceeded maximum stack error'
-                renderBlock('re-rendering');
+                renderBlock(moveType, true);
                 if(moveType === 'top') stopBlock();
             }, 0);
             return true;
@@ -172,10 +170,10 @@ function updateBlockPosition(moveType) {
     return [direction, top, left];
 }
 
-function renderBlock(moveType = '') {
+function renderBlock(moveType, reRendering = false) {
     removePreviousMovingBlock(movingItemNext.type);
 
-    const [direction, top, left] = updateBlockPosition(moveType);
+    const [direction, top, left] = updateBlockPosition(moveType, reRendering);
     movingItem.direction = direction;
     movingItem.left = left;
     movingItem.top = top;
@@ -211,7 +209,7 @@ const pauseBlocks = () => {
 const rotateBlocks = () => {
     if(isPause) return;
     movingItemNext.direction = (movingItemNext.direction + 1) % 4;
-    renderBlock();
+    renderBlock('rotate');
 };
 
 // game view control functions
