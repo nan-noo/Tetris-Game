@@ -1,9 +1,9 @@
 'use-strict';
 
-import BLOCKS from './blocks.js';
-import { ROWS, COLS, endingScore, duration, movingItem } from './settings.js';
-import TetrisGame from './tetris-game.js';
-import TetrisGameController from './game-controller.js';
+import BLOCKS from './tetris/blocks.js';
+import { ROWS, COLS, endingScore, duration, movingItem } from './tetris/settings.js';
+import TetrisGame from './tetris/tetris-game.js';
+import TetrisGameController from './tetris/game-controller.js';
 
 const newGame = new TetrisGame(BLOCKS, ROWS, COLS, endingScore, duration, movingItem);
 const gameCtrl = new TetrisGameController(newGame);
