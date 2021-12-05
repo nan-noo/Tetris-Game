@@ -20,7 +20,7 @@ export default class TetrisGameController {
         if(this.game.isPause){
             clearInterval(this.game.downInterval);
             this.game.showModal("Pause", "CONTINUE");
-            this.game.modalBtn.onclick = () => pauseBlock();
+            this.game.modalBtn.onclick = () => this.pauseBlock();
         }
         else{
             this.game.modal.style.display = "none";
