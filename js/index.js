@@ -13,11 +13,12 @@ const modalBtn = document.querySelector(".modal-button");
 const ROWS = 20;
 const COLS = 10;
 
-let score;
+let score = 0;
 let duration = 500;
 let downInterval;
 let movingItemNext;
-let isPause;
+let isPause = false;
+let isStart = false;
 
 const movingItem = {
     type: "",
@@ -33,12 +34,16 @@ function initializeBlockContainer(numOfRows, numOfColumns) {
     }
 }
 
-function init() {
+function initHtml() {
     container.innerHTML = '';
+    gameScore.innerHTML = 0;
+}
+
+function init() {
+    initHtml();
+
     isPause = false;
     score = 0;
-    gameScore.innerHTML = score;
-
     initializeBlockContainer(ROWS, COLS);
     generateNewBlock();
 }
@@ -238,7 +243,6 @@ function resetGame() {
 }
 
 // start
-let isStart = false;
 init();
 modalBtn.onclick = () => {
     isStart = true;
