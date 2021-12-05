@@ -181,6 +181,7 @@ function renderBlock(moveType, reRendering = false) {
 
 // block control functions
 function moveBlocks(moveType, amount) {
+    if(isPause) return;
     movingItemNext[moveType] += amount;
     renderBlock(moveType);
 }
@@ -214,12 +215,11 @@ function rotateBlocks() {
 
 // game view control functions
 function gameOver() {
-    if(!isStart) return;
-
     clearInterval(downInterval);
-
+    isStart = false;
     showModal("Game Over", "RESTART");
     modalBtn.onclick = () => {
+        isStart = true;
         modal.style.display = "none";
         init();
     }
@@ -229,6 +229,11 @@ function showModal(title, btnTxt) {
     modalText.innerHTML = title;
     modalBtn.innerHTML = btnTxt;
     modal.style.display = "flex";
+}
+
+function resetGame() {
+    if(!isStart || isPause) return;
+    init();
 }
 
 // start
@@ -249,7 +254,7 @@ document.addEventListener("keydown", e => {
         "ArrowLeft"(){ moveBlocks('left', -1); },
         "Space"(){ dropBlocks(); },
         "KeyP"(){ pauseBlocks(); },
-        "KeyR"(){ init(); },
+        "KeyR"(){ resetGame(); },
     }
     if(Object.keys(codes).includes(e.code)) codes[e.code]();
 });
