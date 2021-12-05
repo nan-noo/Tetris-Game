@@ -138,28 +138,22 @@ function removePreviousMovingBlock(type) {
     });
 }
 
-function renderBlock(moveType = '') {
+function updateBlockPosition(moveType) {
     const {type, direction, top, left} = movingItemNext;
 
-    removePreviousMovingBlock(movingItemNext.type);
-
-    // update block position
     BLOCKS[type][direction].some(pos => {
-        const x = pos[0] + top; // row
-        const y = pos[1] + left; // col
-
-        const target = container.childNodes[x] 
-            && container.childNodes[x].childNodes[0].childNodes[y];
+        const nextRow = pos[0] + top;
+        const nextCol = pos[1] + left;
+        const nextPos = container.childNodes[nextRow]?.childNodes[0].childNodes[nextCol];
             
-        if(!!target && !target.classList.contains("stop")) {
-            target.classList.add(type, "moving");
+        if(!!nextPos && !nextPos.classList.contains("stop")) {
+            nextPos.classList.add(type, "moving");
         }
         else{
             if(moveType === 're-rendering'){
                 gameOver();
                 return true;
             }
-
             // back to previous state
             movingItemNext = { ...movingItem };
             setTimeout(() => { // to avoid 'exceeded maximum stack error'
@@ -169,6 +163,14 @@ function renderBlock(moveType = '') {
             return true;
         }
     });
+
+    return [direction, top, left];
+}
+
+function renderBlock(moveType = '') {
+    removePreviousMovingBlock(movingItemNext.type);
+
+    const [direction, top, left] = updateBlockPosition(moveType);
     movingItem.direction = direction;
     movingItem.left = left;
     movingItem.top = top;
