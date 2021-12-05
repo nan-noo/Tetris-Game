@@ -157,16 +157,14 @@ function updateBlockPosition(moveType, reRendering) {
                 gameOver();
                 return true;
             }
-            // back to previous state
             movingItemNext = { ...movingItem };
-            setTimeout(() => { // to avoid 'exceeded maximum stack error'
+            setTimeout(() => { // to avoid 'exceeded maximum stack error
                 renderBlock(moveType, true);
                 if(moveType === 'top') stopBlock();
             }, 0);
             return true;
         }
     });
-
     return [direction, top, left];
 }
 
