@@ -1,3 +1,5 @@
+'use-strict';
+
 import BLOCKS from './blocks.js';
 
 // DOM
@@ -178,17 +180,17 @@ function renderBlock(moveType, reRendering = false) {
 };
 
 // block control functions
-const moveBlocks = (moveType, amount) => {
+function moveBlocks(moveType, amount) {
     movingItemNext[moveType] += amount;
     renderBlock(moveType);
-};
+}
 
-const dropBlocks = () => {
+function dropBlocks() {
     if(isPause) return;
     downInterval = changeInterval(downInterval, 10);
-};
+}
 
-const pauseBlocks = () => {
+function pauseBlocks() {
     if(!isStart) return;
     isPause = !isPause;
     if(isPause){
@@ -202,16 +204,16 @@ const pauseBlocks = () => {
         modal.style.display = "none";
         downInterval = changeInterval(downInterval, duration);
     } 
-};
+}
 
-const rotateBlocks = () => {
+function rotateBlocks() {
     if(isPause) return;
     movingItemNext.direction = (movingItemNext.direction + 1) % 4;
     renderBlock('rotate');
-};
+}
 
 // game view control functions
-const gameOver = () => {
+function gameOver() {
     if(!isStart) return;
 
     clearInterval(downInterval);
@@ -223,11 +225,11 @@ const gameOver = () => {
     }
 };
 
-const showModal = (title, btnTxt) => {
+function showModal(title, btnTxt) {
     modalText.innerHTML = title;
     modalBtn.innerHTML = btnTxt;
     modal.style.display = "flex";
-};
+}
 
 // start
 let isStart = false;
@@ -251,5 +253,3 @@ document.addEventListener("keydown", e => {
     }
     if(Object.keys(codes).includes(e.code)) codes[e.code]();
 });
-    
-
