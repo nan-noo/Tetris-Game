@@ -74,7 +74,7 @@ export default class TetrisGame {
     }
     
     generateNewBlock() {
-        this.changeInterval();
+        this.changeInterval(this.duration -= 1);
     
         const blockTypes = Object.keys(this.blocks);
         const type = blockTypes[Math.floor(Math.random() * blockTypes.length)];

@@ -1,11 +1,11 @@
 'use-strict';
 
 import BLOCKS from './tetris/blocks.js';
-import { ROWS, COLS, endingScore, duration, movingItem } from './tetris/settings.js';
+import { ROWS, COLS, endingScore, duration } from './tetris/settings.js';
 import TetrisGame from './tetris/tetris-game.js';
 import TetrisGameController from './tetris/game-controller.js';
 
-const newGame = new TetrisGame(BLOCKS, ROWS, COLS, endingScore, duration, movingItem);
+const newGame = new TetrisGame(BLOCKS, ROWS, COLS, endingScore, duration);
 const gameCtrl = new TetrisGameController(newGame);
 newGame.init();
 newGame.modalBtn.onclick = () => {
