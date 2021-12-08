@@ -1,15 +1,17 @@
+import TetrisBlock from './tetris-block.js';
+
 export default class TetrisGame {
-    constructor(blocks, rows, columns, endingScore, duration, movingItem) {
+    constructor(blocks, rows, columns, endingScore, duration) {
         this.blocks = blocks;
         this.rows = rows;
         this.cols = columns;
         this.endingScore = endingScore;
         this.duration = duration;
-        this.movingItem = movingItem;
         this.isPause = false;
         this.isStart = false;
         this.score = 0;
         this.downInterval;
+        this.movingItem;
         this.movingItemNext;
 
         this.container = document.querySelector(".container > ul");
@@ -60,7 +62,7 @@ export default class TetrisGame {
 
     downBlock() {
         if(this.isPause) return;
-        this.movingItemNext['top'] += 1;
+        this.movingItemNext.top += 1;
         this.renderBlock('top');
     }
     
@@ -76,11 +78,7 @@ export default class TetrisGame {
     
         const blockTypes = Object.keys(this.blocks);
         const type = blockTypes[Math.floor(Math.random() * blockTypes.length)];
-        this.movingItem.type = type;
-        this.movingItem.direction = 0;
-        this.movingItem.top = 0;
-        this.movingItem.left = 3;
-    
+        this.movingItem = new TetrisBlock(type);
         this.movingItemNext = { ...this.movingItem };
         this.renderBlock('');
     }
