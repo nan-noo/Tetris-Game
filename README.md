@@ -20,6 +20,7 @@ Tetris with vanilla Javascript
 - [x] Detect Completed Line & Remove it
 - [x] Game Score: max 1000
 - [x] Game Over & Ending
+- [x] Increase Block Speed: as the game progresses
 
 ---
 
